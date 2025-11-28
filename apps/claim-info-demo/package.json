@@ -5,6 +5,9 @@
   "dependencies": {
     "next": "~16.0.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@claim-info-demo/core": "workspace:*",
+    "@claim-info-demo/extension-costa-rica": "workspace:*",
+    "@claim-info-demo/extension-panama": "workspace:*"
   }
 }

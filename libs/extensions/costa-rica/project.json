@@ -1,0 +1,23 @@
+{
+  "name": "costa-rica",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/extensions/costa-rica/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/extensions/costa-rica",
+        "main": "libs/extensions/costa-rica/src/index.ts",
+        "tsConfig": "libs/extensions/costa-rica/tsconfig.lib.json",
+        "assets": [
+          "libs/extensions/costa-rica/*.md"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

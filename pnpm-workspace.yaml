@@ -1,4 +1,6 @@
 packages:
   - "apps/*"
+  - "libs/*"
+  - "libs/extensions/*"
 
 autoInstallPeers: true

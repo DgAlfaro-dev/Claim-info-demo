@@ -12,13 +12,26 @@ import {
   Typography,
   Chip,
 } from '@mui/material';
-import { useClaimInfoStore } from '@/core/claimInfo/store/claimInfoStore';
-import { GeneralClaimInformation } from '@/core/claimInfo/components/GeneralClaimInformation';
-import {
-  CountryConfigProvider,
+import { 
+  CountryConfigProvider, 
+  GeneralClaimInformation, 
+  SupportedCountry, 
+  useClaimInfoStore, 
   useCountryConfigContext,
-} from '@/core/claimInfo/context/CountryConfigContext';
-import { SupportedCountry } from '@/core/claimInfo/types';
+  CountryConfigFactory 
+} from '@claim-info-demo/core';
+import { costaRicaConfig } from '@claim-info-demo/extension-costa-rica';
+import { panamaConfig } from '@claim-info-demo/extension-panama';
+
+// Registrar extensiones de países antes de usarlas
+CountryConfigFactory.registerCountryExtension(
+  SupportedCountry.COSTA_RICA,
+  async () => costaRicaConfig
+);
+CountryConfigFactory.registerCountryExtension(
+  SupportedCountry.PANAMA,
+  async () => panamaConfig
+);
 
 function HomePageContent() {
   const { loadMockData, claimInfo } = useClaimInfoStore();

@@ -9,7 +9,10 @@
     "importHelpers": true,
     "target": "es2022",
     "module": "esnext",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "isolatedModules": true,
@@ -20,7 +23,21 @@
     "noImplicitReturns": true,
     "strict": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@claim-info-demo/core": [
+        "libs/core/src/index.ts"
+      ],
+      "@claim-info-demo/extension-costa-rica": [
+        "libs/extensions/costa-rica/src/index.ts"
+      ],
+      "@claim-info-demo/extension-panama": [
+        "libs/extensions/panama/src/index.ts"
+      ]
+    }
   },
-  "exclude": ["node_modules", "tmp", "dist"]
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "dist"
+  ]
 }
