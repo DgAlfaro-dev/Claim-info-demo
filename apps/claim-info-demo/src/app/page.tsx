@@ -1,12 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
-import { useClaimInfoStore } from '@/features/claimInfo/store/claimInfoStore';
-import { GeneralClaimInformation } from '@/features/claimInfo/components/GeneralClaimInformation';
+import { useEffect, useState } from 'react';
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+  Chip,
+} from '@mui/material';
+import { useClaimInfoStore } from '@/core/claimInfo/store/claimInfoStore';
+import { GeneralClaimInformation } from '@/core/claimInfo/components/GeneralClaimInformation';
+import {
+  CountryConfigProvider,
+  useCountryConfigContext,
+} from '@/core/claimInfo/context/CountryConfigContext';
+import { SupportedCountry } from '@/core/claimInfo/types';
 
-export default function HomePage() {
+function HomePageContent() {
   const { loadMockData, claimInfo } = useClaimInfoStore();
+  const { currentCountry, loadCountry, isLoading: isLoadingConfig } = useCountryConfigContext();
+  const [selectedCountry, setSelectedCountry] = useState<SupportedCountry>(
+    SupportedCountry.COSTA_RICA
+  );
 
   useEffect(() => {
     // Cargar datos mock al montar el componente
@@ -15,6 +34,11 @@ export default function HomePage() {
 
   const handleReloadData = () => {
     loadMockData();
+  };
+
+  const handleCountryChange = async (country: SupportedCountry) => {
+    setSelectedCountry(country);
+    await loadCountry(country);
   };
 
   return (
@@ -36,38 +60,81 @@ export default function HomePage() {
               boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Box>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontWeight: 700,
-                    color: '#0D2E68',
-                    marginBottom: 1,
-                  }}
-                >
-                  General Claim Information - Demo
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: '#7E8084',
-                  }}
-                >
-                  Componente de demostración con datos mock
-                </Typography>
-              </Box>
-              <Button
-                variant="contained"
-                onClick={handleReloadData}
-                disabled={claimInfo?.isLoading}
+            <Stack spacing={2}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                {claimInfo?.isLoading ? 'Cargando...' : 'Recargar Datos'}
-              </Button>
+                <Box>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: 700,
+                      color: '#0D2E68',
+                      marginBottom: 1,
+                    }}
+                  >
+                    General Claim Information - Demo
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#7E8084',
+                    }}
+                  >
+                    Sistema extensible por país con configuraciones dinámicas
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  onClick={handleReloadData}
+                  disabled={claimInfo?.isLoading}
+                >
+                  {claimInfo?.isLoading ? 'Cargando...' : 'Recargar Datos'}
+                </Button>
+              </Stack>
+
+              {/* Country Selector */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  paddingTop: 2,
+                  borderTop: '1px solid #EAEAEA',
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: 600, color: '#0D2E68', minWidth: '120px' }}
+                >
+                  Seleccionar país:
+                </Typography>
+                <FormControl size="small" sx={{ minWidth: 200 }}>
+                  <Select
+                    value={selectedCountry}
+                    onChange={(e) =>
+                      handleCountryChange(e.target.value as SupportedCountry)
+                    }
+                    disabled={isLoadingConfig}
+                  >
+                    <MenuItem value={SupportedCountry.COSTA_RICA}>
+                      🇨🇷 Costa Rica
+                    </MenuItem>
+                    <MenuItem value={SupportedCountry.PANAMA}>
+                      🇵🇦 Panamá
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {currentCountry && (
+                  <Chip
+                    label={`País activo: ${currentCountry === SupportedCountry.COSTA_RICA ? 'Costa Rica' : 'Panamá'}`}
+                    color="primary"
+                    size="small"
+                  />
+                )}
+              </Box>
             </Stack>
           </Box>
 
@@ -85,5 +152,13 @@ export default function HomePage() {
         </Stack>
       </Container>
     </Box>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <CountryConfigProvider defaultCountry={SupportedCountry.COSTA_RICA}>
+      <HomePageContent />
+    </CountryConfigProvider>
   );
 }

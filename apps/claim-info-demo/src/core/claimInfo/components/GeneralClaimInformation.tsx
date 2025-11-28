@@ -1,20 +1,8 @@
 'use client';
 
-import {
-  Box,
-  Grid,
-  IconButton,
-  Skeleton,
-  Stack,
-  styled,
-  Typography,
-} from '@mui/material';
-import { FC, PropsWithChildren, ReactNode } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
 import { useGeneralClaimInformation } from '../hooks/useGeneralClaimInformation';
-import { LoadingProp } from '../model/types/common';
 import { PROJECT_NAME } from '@features/shared/model/constants';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { moneyFormat } from '@utils/utils';
 import { Colones } from '@utils/constants/constants';
 import { WaiveDeductibleModal } from './WaiveDeductibleModal';
@@ -22,122 +10,11 @@ import { AlertBanner } from '@features/shared/components/AlertBanner';
 import { getDriverBirthday, getDriverGender } from '../lib/utils';
 import { DriverGenderModal } from './DriverGenderModal';
 import { DriverBirthdayModal } from './DriverBirthdayModal';
-
-// Styled Components
-const InfoCard = styled(Box)(() => ({
-  width: '90%',
-  padding: '16px 21px',
-  boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.08)',
-  borderRadius: '8px',
-  backgroundColor: '#fff',
-  border: '1px solid #EAEAEA',
-}));
-
-const CardTitle = styled(Typography)(() => ({
-  color: '#0D2E68',
-  fontWeight: 900,
-  fontSize: '19px',
-}));
-
-const CardContent = styled(Grid)(() => ({}));
-const CardItem = styled(Grid)(() => ({}));
-
-const LabelText = styled(Typography)(() => ({
-  color: '#7E8084',
-  fontWeight: 500,
-  fontSize: '11px',
-}));
-
-const ValueTypography = styled(Typography)(() => ({
-  color: '#0D2E68',
-  fontWeight: 700,
-  fontSize: '15px',
-}));
-
-const EditIconButton = styled(IconButton)(() => ({
-  borderRadius: '70px',
-  width: '34px',
-  height: '27px',
-  padding: '8px 8px 8px 3px',
-}));
-
-// Value Text Component with Loading State
-const ValueText: FC<PropsWithChildren<LoadingProp>> = ({
-  isLoading,
-  children,
-}) => {
-  return isLoading ? (
-    <Skeleton variant="text" width={110} height={16} />
-  ) : (
-    <ValueTypography
-      id={`${PROJECT_NAME}-label-value-policy-information`}
-      data-testid={`${PROJECT_NAME}-label-value-policy-information`}
-    >
-      {children}
-    </ValueTypography>
-  );
-};
-
-// Editable Field Row Component
-interface EditableFieldRowProps extends LoadingProp {
-  label: string;
-  children: ReactNode;
-  onEdit?: () => void;
-  disabledEdit?: boolean;
-  labelId: string;
-  labelTestId: string;
-  buttonId: string;
-  buttonTestId: string;
-  iconId: string;
-  iconTestId: string;
-}
-
-const EditableFieldRow: FC<EditableFieldRowProps> = ({
-  label,
-  isLoading,
-  children,
-  onEdit,
-  disabledEdit,
-  labelId,
-  labelTestId,
-  buttonId,
-  buttonTestId,
-  iconId,
-  iconTestId,
-}) => {
-  return (
-    <CardItem size={6}>
-      <LabelText id={labelId} data-testid={labelTestId}>
-        {label}
-      </LabelText>
-      <Stack
-        direction="row"
-        gap={1}
-        alignItems="end"
-        justifyContent="space-between"
-      >
-        <ValueText isLoading={isLoading}>{children}</ValueText>
-        <EditIconButton
-          id={buttonId}
-          data-testid={buttonTestId}
-          size="small"
-          disabled={disabledEdit}
-          onClick={onEdit}
-        >
-          <FontAwesomeIcon
-            icon={faPen}
-            id={iconId}
-            data-testid={iconTestId}
-            style={{
-              fontSize: '16px',
-              color: disabledEdit ? '#A3A2A2' : '#0193E5',
-            }}
-          />
-        </EditIconButton>
-      </Stack>
-    </CardItem>
-  );
-};
+import { DynamicFieldsRenderer } from './DynamicFieldsRenderer';
+import { InfoCard, CardTitle, CardContent, CardItem, LabelText } from './shared/StyledComponents';
+import { ValueText, EditableFieldRow } from './shared/UIComponents';
+import { useCountryConfigContext } from '../context/CountryConfigContext';
+import { FixedFieldId } from '../types';
 
 // Main Component
 export const GeneralClaimInformation = () => {
@@ -163,6 +40,14 @@ export const GeneralClaimInformation = () => {
     handleCloseDriverBirthdayModal,
   } = useGeneralClaimInformation();
 
+  // Obtener configuraciones resueltas del país
+  const { resolvedFieldConfigs } = useCountryConfigContext();
+
+  // Helper para obtener configuración de un campo
+  const getFieldConfig = (fieldId: FixedFieldId) => {
+    return resolvedFieldConfigs?.[fieldId] || { label: '', required: false, visible: true };
+  };
+
   return (
     <>
       {banner && <AlertBanner variant={banner} onClose={handleCloseBanner} />}
@@ -182,78 +67,93 @@ export const GeneralClaimInformation = () => {
             </CardTitle>
 
             <CardContent container spacing={2}>
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-name`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-name`}
-                >
-                  Nombre
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.policy?.Owner?.name ?? 'N/A'}{' '}
-                  {claimInfoData?.policy?.Owner?.lastName}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.POLICY_OWNER_NAME).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-name`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-name`}
+                  >
+                    {getFieldConfig(FixedFieldId.POLICY_OWNER_NAME).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.policy?.Owner?.name ?? 'N/A'}{' '}
+                    {claimInfoData?.policy?.Owner?.lastName}
+                  </ValueText>
+                </CardItem>
+              )}
 
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-ruc`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-ruc`}
-                >
-                  Cédula
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.policy?.Owner?.ruc ?? 'N/A'}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.POLICY_OWNER_RUC).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-ruc`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-ruc`}
+                  >
+                    {getFieldConfig(FixedFieldId.POLICY_OWNER_RUC).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.policy?.Owner?.ruc ?? 'N/A'}
+                  </ValueText>
+                </CardItem>
+              )}
 
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-model`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-model`}
-                >
-                  Modelo del auto
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.vehicleInformation?.model ?? 'N/A'}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.VEHICLE_MODEL).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-model`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-model`}
+                  >
+                    {getFieldConfig(FixedFieldId.VEHICLE_MODEL).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.vehicleInformation?.model ?? 'N/A'}
+                  </ValueText>
+                </CardItem>
+              )}
 
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-plate`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-plate`}
-                >
-                  Nro. de placa
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.vehicleInformation?.plate ?? 'N/A'}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.VEHICLE_PLATE).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-plate`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-plate`}
+                  >
+                    {getFieldConfig(FixedFieldId.VEHICLE_PLATE).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.vehicleInformation?.plate ?? 'N/A'}
+                  </ValueText>
+                </CardItem>
+              )}
 
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-chassis`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-chassis`}
-                >
-                  Nro. de chasis
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.vehicleInformation?.serialChassis ?? 'N/A'}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.VEHICLE_CHASSIS).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-chassis`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-chassis`}
+                  >
+                    {getFieldConfig(FixedFieldId.VEHICLE_CHASSIS).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.vehicleInformation?.serialChassis ?? 'N/A'}
+                  </ValueText>
+                </CardItem>
+              )}
 
-              <CardItem size={6}>
-                <LabelText
-                  id={`${PROJECT_NAME}-label-title-policy-information-year`}
-                  data-testid={`${PROJECT_NAME}-label-title-policy-information-year`}
-                >
-                  Año del auto
-                </LabelText>
-                <ValueText isLoading={isLoading}>
-                  {claimInfoData?.vehicleInformation?.year ?? 'N/A'}
-                </ValueText>
-              </CardItem>
+              {getFieldConfig(FixedFieldId.VEHICLE_YEAR).visible && (
+                <CardItem size={6}>
+                  <LabelText
+                    id={`${PROJECT_NAME}-label-title-policy-information-year`}
+                    data-testid={`${PROJECT_NAME}-label-title-policy-information-year`}
+                  >
+                    {getFieldConfig(FixedFieldId.VEHICLE_YEAR).label}
+                  </LabelText>
+                  <ValueText isLoading={isLoading}>
+                    {claimInfoData?.vehicleInformation?.year ?? 'N/A'}
+                  </ValueText>
+                </CardItem>
+              )}
+
+              {/* Campos dinámicos de la sección Policy */}
+              <DynamicFieldsRenderer section="policy" isLoading={isLoading} />
             </CardContent>
           </Stack>
         </InfoCard>
@@ -272,54 +172,60 @@ export const GeneralClaimInformation = () => {
             </CardTitle>
 
             <CardContent container spacing={2}>
-              <EditableFieldRow
-                label="Género de conductor"
-                isLoading={isLoading}
-                onEdit={handleOpenDriverGenderModal}
-                labelId={`${PROJECT_NAME}-label-title-claim-information-driver-gender`}
-                labelTestId={`${PROJECT_NAME}-label-title-claim-information-driver-gender`}
-                buttonId={`${PROJECT_NAME}-button-edit-driver-gender`}
-                buttonTestId={`${PROJECT_NAME}-button-edit-driver-gender`}
-                iconId={`${PROJECT_NAME}-icon-edit-driver-gender`}
-                iconTestId={`${PROJECT_NAME}-icon-edit-driver-gender`}
-              >
-                {getDriverGender(claimInfoData?.claim?.driver?.gender)}
-              </EditableFieldRow>
+              {getFieldConfig(FixedFieldId.DRIVER_GENDER).visible && (
+                <EditableFieldRow
+                  label={getFieldConfig(FixedFieldId.DRIVER_GENDER).label}
+                  isLoading={isLoading}
+                  onEdit={handleOpenDriverGenderModal}
+                  labelId={`${PROJECT_NAME}-label-title-claim-information-driver-gender`}
+                  labelTestId={`${PROJECT_NAME}-label-title-claim-information-driver-gender`}
+                  buttonId={`${PROJECT_NAME}-button-edit-driver-gender`}
+                  buttonTestId={`${PROJECT_NAME}-button-edit-driver-gender`}
+                  iconId={`${PROJECT_NAME}-icon-edit-driver-gender`}
+                  iconTestId={`${PROJECT_NAME}-icon-edit-driver-gender`}
+                >
+                  {getDriverGender(claimInfoData?.claim?.driver?.gender)}
+                </EditableFieldRow>
+              )}
 
-              <EditableFieldRow
-                label="Fecha de nacimiento de conductor"
-                isLoading={isLoading}
-                onEdit={handleOpenDriverBirthdayModal}
-                labelId={`${PROJECT_NAME}-label-title-claim-information-driver-birthday`}
-                labelTestId={`${PROJECT_NAME}-label-title-claim-information-driver-birthday`}
-                buttonId={`${PROJECT_NAME}-button-edit-driver-birthday`}
-                buttonTestId={`${PROJECT_NAME}-button-edit-driver-birthday`}
-                iconId={`${PROJECT_NAME}-icon-edit-driver-birthday`}
-                iconTestId={`${PROJECT_NAME}-icon-edit-driver-birthday`}
-              >
-                {getDriverBirthday(claimInfoData?.claim?.driver?.birthday)}
-              </EditableFieldRow>
+              {getFieldConfig(FixedFieldId.DRIVER_BIRTHDAY).visible && (
+                <EditableFieldRow
+                  label={getFieldConfig(FixedFieldId.DRIVER_BIRTHDAY).label}
+                  isLoading={isLoading}
+                  onEdit={handleOpenDriverBirthdayModal}
+                  labelId={`${PROJECT_NAME}-label-title-claim-information-driver-birthday`}
+                  labelTestId={`${PROJECT_NAME}-label-title-claim-information-driver-birthday`}
+                  buttonId={`${PROJECT_NAME}-button-edit-driver-birthday`}
+                  buttonTestId={`${PROJECT_NAME}-button-edit-driver-birthday`}
+                  iconId={`${PROJECT_NAME}-icon-edit-driver-birthday`}
+                  iconTestId={`${PROJECT_NAME}-icon-edit-driver-birthday`}
+                >
+                  {getDriverBirthday(claimInfoData?.claim?.driver?.birthday)}
+                </EditableFieldRow>
+              )}
 
-              <EditableFieldRow
-                label="Deducible / Deducible calculado"
-                isLoading={isLoading}
-                onEdit={handleOpenWaiveModal}
-                disabledEdit={
-                  claimInfoData?.deductible?.exoneratedByAnalyst ?? false
-                }
-                labelId={`${PROJECT_NAME}-label-title-claim-information-deductible`}
-                labelTestId={`${PROJECT_NAME}-label-title-claim-information-deductible`}
-                buttonId={`${PROJECT_NAME}-button-edit-deductible`}
-                buttonTestId={`${PROJECT_NAME}-button-edit-deductible`}
-                iconId={`${PROJECT_NAME}-icon-edit-deductible`}
-                iconTestId={`${PROJECT_NAME}-icon-edit-deductible`}
-              >
-                {moneyFormat(claimInfoData?.deductible?.Base ?? 0, Colones)} /{' '}
-                {moneyFormat(
-                  claimInfoData?.deductible?.Calculated ?? 0,
-                  Colones,
-                )}
-              </EditableFieldRow>
+              {getFieldConfig(FixedFieldId.DEDUCTIBLE).visible && (
+                <EditableFieldRow
+                  label={getFieldConfig(FixedFieldId.DEDUCTIBLE).label}
+                  isLoading={isLoading}
+                  onEdit={handleOpenWaiveModal}
+                  disabledEdit={
+                    claimInfoData?.deductible?.exoneratedByAnalyst ?? false
+                  }
+                  labelId={`${PROJECT_NAME}-label-title-claim-information-deductible`}
+                  labelTestId={`${PROJECT_NAME}-label-title-claim-information-deductible`}
+                  buttonId={`${PROJECT_NAME}-button-edit-deductible`}
+                  buttonTestId={`${PROJECT_NAME}-button-edit-deductible`}
+                  iconId={`${PROJECT_NAME}-icon-edit-deductible`}
+                  iconTestId={`${PROJECT_NAME}-icon-edit-deductible`}
+                >
+                  {moneyFormat(claimInfoData?.deductible?.Base ?? 0, Colones)} /{' '}
+                  {moneyFormat(
+                    claimInfoData?.deductible?.Calculated ?? 0,
+                    Colones,
+                  )}
+                </EditableFieldRow>
+              )}
 
               <CardItem size={6}>
                 <LabelText
@@ -442,6 +348,9 @@ export const GeneralClaimInformation = () => {
                   {claimInfoData?.deductiblePayment ?? 'N/A'}
                 </ValueText>
               </CardItem>
+
+              {/* Campos dinámicos de la sección Claim */}
+              <DynamicFieldsRenderer section="claim" isLoading={isLoading} />
             </CardContent>
           </Stack>
         </InfoCard>

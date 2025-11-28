@@ -30,7 +30,9 @@
       "@features/*": ["./src/features/*"],
       "@utils/*": ["./src/utils/*"],
       "@theme/*": ["./src/theme/*"],
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@core/*": ["./src/core/*"],
+      "@extensions/*": ["./src/extensions/*"]
     },
     "types": [
       "jest",
