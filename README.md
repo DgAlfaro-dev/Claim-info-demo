@@ -1,25 +1,19 @@
-# ClaimInfoDemo - Sistema Extensible por País
+# ClaimInfoDemo — Country‑extensible system
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This repository implements a claims information system (ClaimInfo) based on an Nx monorepo and a modular architecture. The core is decoupled from country‑specific extensions, allowing new countries to be added without modifying the base code or affecting existing behavior.
 
-## 🎯 Descripción
-
-Sistema extensible de información de reclamos (ClaimInfo) construido como un **monorepo Nx** con arquitectura modular. El core del sistema está separado de las extensiones específicas por país, permitiendo agregar nuevos países sin modificar el código base.
-
-### Características Principales
-
-✅ **Monorepo con Nx** - Build system optimizado con cache y dependencias explícitas  
-✅ **Librerías independientes** - Core y extensiones se compilan por separado  
-✅ **Sin dependencias circulares** - Patrón de registro para extensiones  
-✅ **Extensible por país** - Agregar países sin tocar el core  
-✅ **TypeScript estricto** - Type-safe en todo el sistema  
-✅ **Lazy loading** - Configuraciones de país se cargan bajo demanda  
-✅ **Multi-moneda** - Soporte para monedas específicas por país (CRC, USD, PAB, etc.)  
-✅ **264 tests** - Cobertura completa: 68 core + 70 Costa Rica + 126 Panamá
+Key characteristics:
+- Nx monorepo with incremental builds and caching.
+- Independent libraries: core and extensions compile separately.
+- Registry pattern for extensions to avoid circular dependencies.
+- Country extensibility via declarative configuration and lazy loading.
+- Strict TypeScript typing across the system.
+- Multi‑currency support and country‑specific validations.
+- Unit and integration tests covering core and extensions.
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ### Monorepo Structure
 
@@ -74,7 +68,7 @@ workspace/
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start
 
 ### Prerequisites
 
@@ -86,12 +80,12 @@ workspace/
 
 ### Installation & Development
 
-```bash
+```powershell
 # Clone repository
 git clone <repository-url>
 cd claim-info-demo
 
-# Install dependencies (uses pnpm workspaces)
+# Install dependencies (pnpm workspaces)
 pnpm install
 
 # Start development server
@@ -102,7 +96,7 @@ pnpm dev
 
 ### Build for Production
 
-```bash
+```powershell
 # Build all libraries in dependency order
 pnpm build:libs
 
@@ -114,7 +108,7 @@ pnpm build:all
 
 ### Development Workflow
 
-```bash
+```powershell
 # Run specific library build
 nx build core
 nx build costa-rica
@@ -129,7 +123,7 @@ nx build panama --with-deps
 
 ---
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 ### Test Suite Overview
 
@@ -142,7 +136,7 @@ nx build panama --with-deps
 
 ### Running Tests
 
-```bash
+```powershell
 # Execute specific library tests
 nx test core
 nx test costa-rica
@@ -171,18 +165,15 @@ nx test core --testNamePattern="Factory"
 
 ### Quality Gates
 
-- ✅ All 264 tests passing on main branch
-- ✅ Minimum 85% code coverage enforced
-- ✅ No snapshot test failures
-- ✅ TypeScript compilation errors = 0
+Changes are integrated only with passing tests, minimum code coverage, and successful TypeScript compilation.
 
 ---
 
-## 📚 Nx Workspace Operations
+## Nx Workspace Operations
 
 ### Project Management
 
-```bash
+```powershell
 # List all projects in workspace
 nx show projects
 # Output: core, costa-rica, panama, claim-info-demo
@@ -191,12 +182,12 @@ nx show projects
 nx show project core --web
 
 # View project configuration
-cat libs/core/project.json
+Get-Content libs/core/project.json
 ```
 
 ### Build Operations
 
-```bash
+```powershell
 # Build single library
 nx build core
 
@@ -216,7 +207,7 @@ nx affected --target=build
 
 ### Dependency Graph Visualization
 
-```bash
+```powershell
 # Interactive dependency graph
 nx graph
 
@@ -232,7 +223,7 @@ nx graph --file=graph.html
 
 ### Cache Management
 
-```bash
+```powershell
 # View cache statistics
 nx show cache-status
 
@@ -245,39 +236,13 @@ nx build core --skip-nx-cache
 
 ---
 
-## 🌍 Adding New Countries
+## Adding New Countries
 
-**Ready to expand to a new market?** See **[ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md)** for comprehensive implementation guide.
-
-### Implementation Overview
-
-| Phase | Tasks | Estimated Time |
-|-------|-------|----------------|
-| **1. Setup** | Create library, configure TypeScript paths | 5 min |
-| **2. Configuration** | Define field overrides, validations, store extensions | 10 min |
-| **3. Integration** | Register in application, update UI | 5 min |
-| **4. Testing** | Write unit tests, validate functionality | 10 min |
-| **Total** | **Complete country integration** | **~30 min** |
-
-### What You'll Implement
-
-- ✅ Field configuration overrides (labels, validation rules)
-- ✅ Dynamic custom fields (country-specific data)
-- ✅ State management extensions (Zustand store slices)
-- ✅ Business rule validations (regulatory compliance)
-- ✅ UI components (optional custom widgets)
-- ✅ Currency and locale settings
-
-### Zero Risk Guarantee
-
-- ✅ No core code modifications required
-- ✅ Isolated extension prevents regressions
-- ✅ Existing countries remain untouched
-- ✅ Rollback = simply remove extension library
+Adding a new country is performed by creating an extension library that exports a `CountryConfig` and registering it in the application using `CountryConfigFactory`. The detailed guide is available in [ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md).
 
 ---
 
-## 🏗️ Architectural Patterns & Design Principles
+## Architectural Patterns & Design Principles
 
 ### 1. Plugin Architecture (Inversion of Control)
 
@@ -307,11 +272,11 @@ CountryConfigFactory.registerCountryExtension(
 );
 ```
 
-**Benefits:**
-- ✅ Core remains agnostic to extensions (Open/Closed Principle)
-- ✅ Runtime plugin discovery without compile-time coupling
-- ✅ Enables tree-shaking and code-splitting
-- ✅ Facilitates independent library versioning
+Benefits:
+- The core remains agnostic to extensions (Open/Closed Principle).
+- Runtime plugin discovery without compile‑time coupling.
+- Tree‑shaking and code‑splitting enabled.
+- Independent library versioning.
 
 ### 2. Dependency Graph & Build Order
 
@@ -345,11 +310,11 @@ CountryConfigFactory.registerCountryExtension(
 2. Extensions build in parallel (peer dependencies only)
 3. Application builds last (imports all modules)
 
-**Advantages:**
-- ✅ Parallel builds for extensions (faster CI/CD)
-- ✅ Nx cache granularity per library
-- ✅ Tree-shaking optimization
-- ✅ No circular dependency violations
+Advantages:
+- Parallel builds for extensions.
+- Granular Nx cache per library.
+- Tree‑shaking optimization.
+- No circular dependency violations.
 
 ### 3. Configuration Override Pattern
 
@@ -378,9 +343,9 @@ export const panamaFieldOverrides: FieldOverridesMap = {
 // Result: Merged configuration maintains other defaults
 ```
 
-**Fixed Field Categories:**
-- Policy Information (6 fields): Owner data, vehicle details
-- Claim Information (12 fields): Driver details, deductible, coverage
+Fixed field categories:
+- Policy Information: owner and vehicle data.
+- Claim Information: claim data, deductible, coverage, and related fields.
 
 #### 3.2 Dynamic Fields (Composition Pattern)
 
@@ -403,11 +368,11 @@ export const panamaDynamicFields: DynamicFieldDefinition[] = [
 ];
 ```
 
-**Dynamic Field Features:**
-- Custom validation logic
-- Specialized UI components (modals, pickers, etc.)
-- Section placement control (policy vs. claim)
-- Position ordering within section
+Dynamic field features:
+- Custom validation logic.
+- Specialized UI components (modals, pickers, etc.).
+- Section placement control (policy vs. claim).
+- Position ordering within the section.
 
 ### 4. State Management Extension (Zustand Slices)
 
@@ -445,11 +410,11 @@ export const panamaStoreExtension = {
 };
 ```
 
-**State Extension Capabilities:**
-- Additional state slices (typed)
-- Custom actions with business logic
-- Access to core state via `get()`
-- Reactive updates via `set()`
+State extension capabilities:
+- Additional typed state slices.
+- Custom actions with country‑specific business logic.
+- Access to core state via `get()`.
+- Reactive updates via `set()`.
 
 ### 5. Multi-Currency Support
 
@@ -502,7 +467,7 @@ const validateTaxId = (value: string): boolean => {
 
 ---
 
-## 🔧 Workspace Configuration
+## Workspace Configuration
 
 ### Package Manager: pnpm Workspaces
 
@@ -515,11 +480,11 @@ packages:
   - "libs/extensions/*"  # Country extensions
 ```
 
-**Benefits:**
-- Hoisted dependencies for space efficiency
-- Strict workspace protocol enforcement
-- Fast installation with content-addressable storage
-- Phantom dependency prevention
+Benefits:
+- Hoisted dependencies for space efficiency.
+- Strict workspace protocol enforcement.
+- Fast installation with content‑addressable storage.
+- Phantom dependency prevention.
 
 ### TypeScript Path Mapping
 
@@ -544,7 +509,7 @@ Barrel exports configured in `tsconfig.base.json`:
 }
 ```
 
-**Import Examples:**
+Import examples:
 ```typescript
 // Clean barrel imports
 import { CountryConfigFactory, useClaimInfoStore } from '@claim-info-demo/core';
@@ -574,15 +539,15 @@ Key settings in `nx.json`:
 }
 ```
 
-**Optimization Features:**
-- Computation caching (local + remote)
-- Affected project detection
-- Parallel task execution
-- Dependency-based task orchestration
+Optimization features:
+- Computation caching (local and remote).
+- Affected project detection.
+- Parallel task execution.
+- Dependency‑based task orchestration.
 
 ---
 
-## 📋 Available NPM Scripts
+## Available NPM Scripts
 
 ### Development Scripts
 
@@ -617,11 +582,11 @@ Key settings in `nx.json`:
 
 ---
 
-## 🛠️ Development Tools & IDE Setup
+## Development Tools & IDE Setup
 
 ### Recommended VS Code Extensions
 
-```bash
+```powershell
 # Nx Console - Visual interface for Nx commands
 code --install-extension nrwl.angular-console
 
@@ -652,9 +617,9 @@ Nx Console plugin available in JetBrains Marketplace:
 
 ---
 
-## 📊 Implemented Country Extensions
+## Implemented Country Extensions
 
-### Costa Rica 🇨🇷
+### Costa Rica
 
 **Extension:** `@claim-info-demo/extension-costa-rica`
 
@@ -675,7 +640,7 @@ Nx Console plugin available in JetBrains Marketplace:
 
 ---
 
-### Panama 🇵🇦
+### Panama
 
 **Extension:** `@claim-info-demo/extension-panama`
 
@@ -715,7 +680,7 @@ Nx Console plugin available in JetBrains Marketplace:
 
 ---
 
-## 🎉 Business Value & Technical Benefits
+## Business Value & Technical Benefits
 
 ### Development Velocity
 
@@ -744,26 +709,19 @@ Nx Console plugin available in JetBrains Marketplace:
 ### Operational Excellence
 
 #### For Development Teams
-- ✅ **Rapid Market Entry**: 15-30 minute country setup
-- ✅ **Zero Core Touch**: Extensions never modify foundation
-- ✅ **Parallel Development**: Multiple countries simultaneously
-- ✅ **Clear Ownership**: Country teams own their extensions
-- ✅ **Type Safety**: Compile-time validation prevents runtime errors
-- ✅ **Hot Reload**: Instant feedback during development
+- Country onboarding with low risk and no core modification.
+- Parallel development by country teams.
+- Strict typing and rapid feedback during development.
 
 #### For Product Teams
-- ✅ **Market Flexibility**: Enable/disable countries via configuration
-- ✅ **A/B Testing**: Deploy country variants independently
-- ✅ **Regulatory Compliance**: Country-specific business rules enforced
-- ✅ **Localization**: Currency, formats, labels per country
-- ✅ **Feature Flags**: Gradual rollout per market
+- Enable/disable countries via configuration.
+- Enforcement of market‑specific rules and validations.
+- Localization of currency, formats, and labels.
 
 #### For Operations Teams
-- ✅ **Predictable Core**: Foundation changes rare and well-tested
-- ✅ **Isolated Incidents**: Country bugs don't cascade
-- ✅ **Independent Deploys**: Roll out single country updates
-- ✅ **Observability**: Clear boundaries for monitoring
-- ✅ **Rollback Safety**: Revert extension without core impact
+- Stable and predictable core.
+- Incident isolation per country.
+- Deployment and rollback per extension.
 
 ### Technical Debt Prevention
 
@@ -778,36 +736,28 @@ Nx Console plugin available in JetBrains Marketplace:
 
 ---
 
-## 🤝 Contributing Guidelines
+## Contributing Guidelines
 
 ### Adding Core Features
 
-**Criteria for Core:**
-- ✅ Used by **all** or **most** countries
-- ✅ Fundamental domain concept (e.g., claims, policies)
-- ✅ Infrastructure concern (e.g., state management, routing)
+Criteria for Core:
+- Used by all or most countries.
+- Fundamental domain or infrastructure concerns (state management, routing, etc.).
 
-**Process:**
-1. Propose change via RFC (Request for Comments)
-2. Verify backward compatibility
-3. Update all affected tests
-4. Document API changes
-5. Get approval from 2+ architects
+Process:
+1) Propose changes via RFC.
+2) Verify backward compatibility.
+3) Update affected tests.
+4) Document API changes.
+5) Obtain technical approval.
 
 ### Adding Country Extensions
 
-See **[ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md)** for complete guide.
-
-**Quick Checklist:**
-- [ ] Extension library created via Nx generator
-- [ ] Configuration object implements `CountryConfig` interface
-- [ ] Registered in application layer
-- [ ] Minimum 80% test coverage
-- [ ] Documentation updated
+The complete guide to adding new countries is available in [ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md). Implementation must conform to core contracts, be registered in the application, and include appropriate test coverage.
 
 ---
 
-## 📚 Technical Documentation
+## Technical Documentation
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
@@ -818,7 +768,7 @@ See **[ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md)** for complete guide.
 
 ---
 
-## 🔗 Technology Stack & References
+## Technology Stack & References
 
 ### Core Technologies
 
@@ -849,7 +799,7 @@ See **[ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md)** for complete guide.
 
 ---
 
-## 📄 License
+## License
 
 **MIT License**
 
@@ -863,7 +813,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
-## 📞 Support & Contact
+## Support & Contact
 
 **For technical questions:**
 - Review [ADDING_NEW_COUNTRY.md](./ADDING_NEW_COUNTRY.md)
@@ -876,5 +826,3 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - Follow contribution guidelines
 
 ---
-
-**Built with ❤️ using Enterprise Architecture Patterns**
