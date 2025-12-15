@@ -29,16 +29,9 @@ interface InsuranceZoneModalProps {
  * Zonas de seguro disponibles en Panamá
  */
 const INSURANCE_ZONES = [
-  { value: 'PANAMA_CITY', label: 'Ciudad de Panamá' },
-  { value: 'COLON', label: 'Colón' },
-  { value: 'CHIRIQUI', label: 'Chiriquí' },
-  { value: 'BOCAS_DEL_TORO', label: 'Bocas del Toro' },
-  { value: 'COCLE', label: 'Coclé' },
-  { value: 'HERRERA', label: 'Herrera' },
-  { value: 'LOS_SANTOS', label: 'Los Santos' },
-  { value: 'VERAGUAS', label: 'Veraguas' },
-  { value: 'DARIEN', label: 'Darién' },
-  { value: 'OTHER', label: 'Otra zona' },
+  { value: 'URBAN', label: 'Urbana' },
+  { value: 'RURAL', label: 'Rural' },
+  { value: 'INTERIOR', label: 'Interior' },
 ];
 
 /**

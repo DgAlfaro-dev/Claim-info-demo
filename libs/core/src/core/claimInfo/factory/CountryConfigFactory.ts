@@ -6,6 +6,7 @@
 import { CountryConfig, SupportedCountry } from '../types';
 import { dynamicFieldsRegistry } from '../registry/dynamicFieldsRegistry';
 import { storeExtensionRegistry } from '../registry/storeExtensionRegistry';
+import { submitExtensionsRegistry } from '../extensionPoints/submitExtensionsRegistry';
 
 /**
  * Cache de configuraciones cargadas
@@ -52,6 +53,14 @@ export class CountryConfigFactory {
         };
 
         storeExtensionRegistry.register(countryCode, slice);
+      }
+
+      // Registrar extensiones de submit si existen
+      if (config.submitExtensions) {
+        submitExtensionsRegistry.registerCountryExtensions(
+          countryCode,
+          config.submitExtensions
+        );
       }
 
       // Guardar en cache
@@ -108,6 +117,7 @@ export class CountryConfigFactory {
     configCache.clear();
     dynamicFieldsRegistry.clear();
     storeExtensionRegistry.clear();
+    submitExtensionsRegistry.clear();
   }
 
   /**

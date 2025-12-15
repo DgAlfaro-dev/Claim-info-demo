@@ -12,6 +12,9 @@ export * from './config/defaultFieldConfigs';
 // Registry
 export * from './registry';
 
+// Extension Points
+export * from './extensionPoints';
+
 // Factory
 export * from './factory/CountryConfigFactory';
 
@@ -30,9 +33,13 @@ export * from './components/WaiveDeductibleModal';
 export * from './components/DriverGenderModal';
 export * from './components/DriverBirthdayModal';
 export * from './components/DynamicFieldsRenderer';
+export * from './components/FloatingSubmitButton';
+export * from './components/SubmitFeedback';
+export * from './components/FieldValidationError';
 
 // Hooks (re-export)
 export * from './hooks/useGeneralClaimInformation';
+export * from './hooks/useSubmitClaim';
 
 // Model types (re-export)
 export * from './model/types/claimInfo';

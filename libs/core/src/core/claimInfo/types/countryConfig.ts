@@ -4,6 +4,7 @@
  */
 
 import { DynamicFieldDefinition, FieldOverridesMap } from './fieldConfig';
+import { SubmitExtensions } from '../extensionPoints/types';
 
 /**
  * Configuración completa de un país
@@ -21,6 +22,8 @@ export interface CountryConfig {
   storeExtension?: StoreExtension;
   /** Validaciones globales específicas del país */
   globalValidations?: CountryValidations;
+  /** Extensiones del pipeline de submit (opcional) */
+  submitExtensions?: SubmitExtensions;
 }
 
 /**

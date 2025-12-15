@@ -33,11 +33,18 @@ const EditIconButton = styled(IconButton)(() => ({
 const CardItem = styled(Grid)(() => ({}));
 
 /**
- * Valida formato de RUC panameño: 1234567-1-123456
+ * Valida formato de Tax ID panameño
+ * Acepta: cédula (8-123-456), jurídica (PE-12-3456) o RUC (1234567-1-123456)
  */
 const validateTaxId = (value: string): boolean => {
+  // Natural: 8-123-456
+  const naturalRegex = /^[1-9N]-\d{1,3}-\d{1,6}$/;
+  // Jurídica: PE-12-3456
+  const juridicaRegex = /^(PE|E|N|PI|NT|AV)-\d{1,4}-\d{1,6}$/;
+  // RUC completo: 1234567-1-123456
   const rucRegex = /^\d{7}-\d{1}-\d{6}$/;
-  return rucRegex.test(value);
+  
+  return naturalRegex.test(value) || juridicaRegex.test(value) || rucRegex.test(value);
 };
 
 /**
@@ -64,12 +71,12 @@ export const PanamaTaxIdField: FC<DynamicFieldComponentProps> = ({
 
   const handleConfirm = () => {
     if (!tempValue.trim()) {
-      setError('El RUC es requerido');
+      setError('El Tax ID es requerido');
       return;
     }
 
     if (!validateTaxId(tempValue)) {
-      setError('Formato inválido: 1234567-1-123456');
+      setError('Formato inválido. Ej: 8-123-456, PE-12-3456');
       return;
     }
 
@@ -113,9 +120,9 @@ export const PanamaTaxIdField: FC<DynamicFieldComponentProps> = ({
               setError('');
             }}
             onKeyDown={handleKeyPress}
-            placeholder="1234567-1-123456"
+            placeholder="8-123-456"
             error={!!error}
-            helperText={error || 'Formato: 1234567-1-123456'}
+            helperText={error || 'Ej: 8-123-456, PE-12-3456 o 1234567-1-123456'}
             autoFocus
             sx={{
               '& .MuiInputBase-root': {

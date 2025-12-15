@@ -16,6 +16,7 @@ import { ValueText, EditableFieldRow } from './shared/UIComponents';
 import { useCountryConfigContext } from '../context/CountryConfigContext';
 import { FixedFieldId } from '../types';
 import { getDefaultFieldConfig } from '../config/defaultFieldConfigs';
+import { FieldValidationError } from './FieldValidationError';
 
 /**
  * Obtiene el símbolo de moneda según el código de la moneda
@@ -107,6 +108,7 @@ export const GeneralClaimInformation = () => {
                     {claimInfoData?.policy?.Owner?.name ?? 'N/A'}{' '}
                     {claimInfoData?.policy?.Owner?.lastName}
                   </ValueText>
+                  <FieldValidationError fieldKey="ownerName" />
                 </CardItem>
               )}
 
@@ -121,6 +123,7 @@ export const GeneralClaimInformation = () => {
                   <ValueText isLoading={isLoading}>
                     {claimInfoData?.policy?.Owner?.ruc ?? 'N/A'}
                   </ValueText>
+                  <FieldValidationError fieldKey="ruc" />
                 </CardItem>
               )}
 
@@ -135,6 +138,7 @@ export const GeneralClaimInformation = () => {
                   <ValueText isLoading={isLoading}>
                     {claimInfoData?.vehicleInformation?.model ?? 'N/A'}
                   </ValueText>
+                  <FieldValidationError fieldKey="model" />
                 </CardItem>
               )}
 
@@ -149,6 +153,7 @@ export const GeneralClaimInformation = () => {
                   <ValueText isLoading={isLoading}>
                     {claimInfoData?.vehicleInformation?.plate ?? 'N/A'}
                   </ValueText>
+                  <FieldValidationError fieldKey="plate" />
                 </CardItem>
               )}
 

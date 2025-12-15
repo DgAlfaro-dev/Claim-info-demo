@@ -9,8 +9,8 @@
 export const panamaStoreExtension = {
   initialState: {
     // Estado adicional para Panamá con valores por defecto (demo)
-    panamaTaxId: '1234567-1-123456',
-    panamaInsuranceZone: 'PANAMA_CITY',
+    panamaTaxId: '8-123-456',
+    panamaInsuranceZone: 'URBAN',
     hasPanamaSpecialTax: false,
   },
   actions: {

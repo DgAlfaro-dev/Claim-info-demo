@@ -22,6 +22,10 @@ export interface ClaimInfoStoreProps {
   setDynamicFieldValue: (fieldId: string, value: any) => void;
   getDynamicFieldValue: (fieldId: string) => any;
   initializeDynamicFields: (initialValues: Record<string, any>) => void;
+  // Errores de validación
+  validationErrors: Record<string, string>;
+  setValidationErrors: (errors: Record<string, string>) => void;
+  clearValidationErrors: () => void;
 }
 
 export const useClaimInfoStore = create<ClaimInfoStoreProps>((set, get) => {
@@ -29,6 +33,7 @@ export const useClaimInfoStore = create<ClaimInfoStoreProps>((set, get) => {
   const baseState: ClaimInfoStoreProps = {
     claimInfo: undefined,
     dynamicFieldsData: {},
+    validationErrors: {},
 
     // Acciones del store
     setClaimInfo: actions.setClaimInfo(set),
@@ -39,6 +44,8 @@ export const useClaimInfoStore = create<ClaimInfoStoreProps>((set, get) => {
     setDynamicFieldValue: actions.setDynamicFieldValue(set, get),
     getDynamicFieldValue: actions.getDynamicFieldValue(get),
     initializeDynamicFields: actions.initializeDynamicFields(set),
+    setValidationErrors: (errors: Record<string, string>) => set({ validationErrors: errors }),
+    clearValidationErrors: () => set({ validationErrors: {} }),
   };
 
   // Combinar con extensiones de países si existen

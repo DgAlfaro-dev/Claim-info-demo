@@ -81,9 +81,6 @@ workspace/
 ### Installation & Development
 
 ```powershell
-# Clone repository
-git clone <repository-url>
-cd claim-info-demo
 
 # Install dependencies (pnpm workspaces)
 pnpm install

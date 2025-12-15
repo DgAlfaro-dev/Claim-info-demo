@@ -18,7 +18,10 @@ import {
   SupportedCountry, 
   useClaimInfoStore, 
   useCountryConfigContext,
-  CountryConfigFactory 
+  CountryConfigFactory,
+  FloatingSubmitButton,
+  SubmitFeedback,
+  useSubmitClaim,
 } from '@claim-info-demo/core';
 import { costaRicaConfig } from '@claim-info-demo/extension-costa-rica';
 import { panamaConfig } from '@claim-info-demo/extension-panama';
@@ -39,6 +42,8 @@ function HomePageContent() {
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountry>(
     SupportedCountry.COSTA_RICA
   );
+  const { submitResult, clearSubmitResult } = useSubmitClaim();
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
     // Cargar datos mock al montar el componente
@@ -53,6 +58,26 @@ function HomePageContent() {
     setSelectedCountry(country);
     await loadCountry(country);
   };
+
+  const handleSubmitSuccess = () => {
+    setShowFeedback(true);
+  };
+
+  const handleSubmitError = () => {
+    setShowFeedback(true);
+  };
+
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    clearSubmitResult();
+  };
+
+  // Mostrar feedback cuando hay un resultado
+  useEffect(() => {
+    if (submitResult) {
+      setShowFeedback(true);
+    }
+  }, [submitResult]);
 
   return (
     <Box
@@ -164,6 +189,19 @@ function HomePageContent() {
           </Box>
         </Stack>
       </Container>
+
+      {/* Floating Submit Button */}
+      <FloatingSubmitButton 
+        onSuccess={handleSubmitSuccess}
+        onError={handleSubmitError}
+      />
+
+      {/* Submit Feedback */}
+      <SubmitFeedback
+        result={submitResult}
+        open={showFeedback}
+        onClose={handleCloseFeedback}
+      />
     </Box>
   );
 }

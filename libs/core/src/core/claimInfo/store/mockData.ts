@@ -13,8 +13,10 @@ export const mockClaimDataCostaRica: ClaimInfoData = {
     policyNumber: 'POL-CR-2024-001234',
     Owner: {
       name: 'Juan Carlos',
+      // name: '', //  ERROR: Campo requerido
       lastName: 'Rodríguez Pérez',
       ruc: '1-1234-5678', // Formato Costa Rica
+      // ruc: '123', //  ERROR: RUC inválido (debe tener 9-10 dígitos)
     },
     Broker: {
       FullName: 'Seguros del Pacífico S.A.',
@@ -24,6 +26,7 @@ export const mockClaimDataCostaRica: ClaimInfoData = {
         coverageCode: '001',
         description: 'Cobertura Amplia',
         insuredAmount: '15000000', // ₡15,000,000 Colones
+        // insuredAmount: '0', //  ERROR: Monto debe ser > 0
       },
       {
         coverageCode: '002',
@@ -35,7 +38,9 @@ export const mockClaimDataCostaRica: ClaimInfoData = {
   },
   vehicleInformation: {
     model: 'Toyota Corolla',
+    // model: '', //  ERROR: Campo requerido
     plate: 'ABC-1234', // Formato Costa Rica
+    // plate: '', //  ERROR: Campo requerido
     serialChassis: 'JT2BG22K0X0123456',
     year: 2022,
     depreciation: 15,
@@ -53,6 +58,7 @@ export const mockClaimDataCostaRica: ClaimInfoData = {
   deductible: {
     Base: 150000, // ₡150,000 Colones
     Calculated: 135000, // ₡135,000 Colones
+    // Calculated: -100, //  ERROR: Deducible no puede ser negativo
     exoneratedByAnalyst: false,
   },
   coverageCode: '001',
@@ -72,8 +78,10 @@ export const mockClaimDataPanama: ClaimInfoData = {
     policyNumber: 'POL-PA-2024-789456',
     Owner: {
       name: 'Roberto',
+      // name: '', //  ERROR: Campo requerido
       lastName: 'Martínez López',
       ruc: '1234567-1-123456', // Formato Panama
+      // ruc: '12', //  ERROR: RUC debe tener al menos 3 caracteres
     },
     Broker: {
       FullName: 'Aseguradora Mundial de Panamá S.A.',
@@ -83,6 +91,7 @@ export const mockClaimDataPanama: ClaimInfoData = {
         coverageCode: '001',
         description: 'Cobertura Amplia',
         insuredAmount: '25000', // $25,000 USD
+        // insuredAmount: '0', //  ERROR: Monto debe ser > 0
       },
       {
         coverageCode: '002',
@@ -94,7 +103,10 @@ export const mockClaimDataPanama: ClaimInfoData = {
   },
   vehicleInformation: {
     model: 'Honda Civic',
+    // model: '', //  ERROR: Campo requerido
     plate: '123456', // Formato Panama (solo números)
+    // plate: '', //  ERROR: Campo requerido
+    // plate: 'ABC123', //  ERROR: Placa debe tener solo números en Panamá
     serialChassis: '2HGFC2F59MH123456',
     year: 2023,
     depreciation: 12,

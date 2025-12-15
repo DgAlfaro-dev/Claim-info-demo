@@ -8,6 +8,7 @@ import { panamaFieldOverrides } from './config/fieldOverrides';
 import { panamaDynamicFields } from './config/dynamicFields';
 import { panamaStoreExtension } from './store/storeExtension';
 import { panamaValidations } from './validations/globalValidations';
+import { panamaSubmitExtensions } from './submitExtensions';
 
 /**
  * Configuración completa de Panamá
@@ -19,4 +20,5 @@ export const panamaConfig: CountryConfig = {
   dynamicFields: panamaDynamicFields,
   storeExtension: panamaStoreExtension,
   globalValidations: panamaValidations,
+  submitExtensions: panamaSubmitExtensions,
 };

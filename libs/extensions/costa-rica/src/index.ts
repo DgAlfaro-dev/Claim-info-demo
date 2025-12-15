@@ -7,6 +7,7 @@ import { CountryConfig, SupportedCountry } from '@claim-info-demo/core';
 import { costaRicaFieldOverrides } from './config/fieldOverrides';
 import { costaRicaStoreExtension } from './store/storeExtension';
 import { costaRicaValidations } from './validations/globalValidations';
+import { costaRicaSubmitExtensions } from './submitExtensions';
 
 /**
  * Configuración completa de Costa Rica
@@ -21,4 +22,5 @@ export const costaRicaConfig: CountryConfig = {
   ],
   storeExtension: costaRicaStoreExtension,
   globalValidations: costaRicaValidations,
+  submitExtensions: costaRicaSubmitExtensions,
 };

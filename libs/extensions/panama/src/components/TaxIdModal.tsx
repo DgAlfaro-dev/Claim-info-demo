@@ -36,19 +36,24 @@ export const TaxIdModal: FC<TaxIdModalProps> = ({
   const [error, setError] = useState('');
 
   const validateTaxId = (value: string): boolean => {
-    // Formato: 1234567-1-123456 (número-dígito-número)
+    // Natural: 8-123-456
+    const naturalRegex = /^[1-9N]-\d{1,3}-\d{1,6}$/;
+    // Jurídica: PE-12-3456 o E-8-12345
+    const juridicaRegex = /^(PE|E|N|PI|NT|AV)-\d{1,4}-\d{1,6}$/;
+    // RUC completo: 1234567-1-123456
     const rucRegex = /^\d{7}-\d{1}-\d{6}$/;
-    return rucRegex.test(value);
+    
+    return naturalRegex.test(value) || juridicaRegex.test(value) || rucRegex.test(value);
   };
 
   const handleConfirm = () => {
     if (!taxId.trim()) {
-      setError('El RUC es requerido');
+      setError('El Tax ID es requerido');
       return;
     }
 
     if (!validateTaxId(taxId)) {
-      setError('Formato inválido. Use: 1234567-1-123456');
+      setError('Formato inválido. Use: 8-123-456 o PE-12-3456 o 1234567-1-123456');
       return;
     }
 
@@ -75,7 +80,7 @@ export const TaxIdModal: FC<TaxIdModalProps> = ({
           data-testid={`${PROJECT_NAME}-modal-panama-tax-id-description`}
           sx={{ color: '#7E8084', fontSize: '14px' }}
         >
-          Ingrese el Registro Único de Contribuyente (RUC) del asegurado.
+          Ingrese el Tax ID (cédula), RUC o número de identificación del asegurado.
         </Typography>
 
         <Box>
@@ -83,15 +88,15 @@ export const TaxIdModal: FC<TaxIdModalProps> = ({
             id={`${PROJECT_NAME}-input-panama-tax-id`}
             data-testid={`${PROJECT_NAME}-input-panama-tax-id`}
             fullWidth
-            label="RUC"
-            placeholder="1234567-1-123456"
+            label="Tax ID / RUC"
+            placeholder="8-123-456"
             value={taxId}
             onChange={(e) => {
               setTaxId(e.target.value);
               setError('');
             }}
             error={!!error}
-            helperText={error || 'Formato: 1234567-1-123456'}
+            helperText={error || 'Ej: 8-123-456, PE-12-3456 o 1234567-1-123456'}
             autoFocus
             sx={{
               '& .MuiInputBase-root': {
