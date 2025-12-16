@@ -5,9 +5,15 @@
   "scripts": {
     "dev": "nx dev claim-info-demo",
     "build": "nx build claim-info-demo",
+    "build:libs": "nx build core && nx build costa-rica && nx build panama",
+    "build:all": "pnpm build:libs && cd apps/claim-info-demo && pnpm next build",
     "start": "nx start claim-info-demo",
     "test": "nx test claim-info-demo",
-    "lint": "nx lint claim-info-demo"
+    "test:all": "nx run-many --target=test --all",
+    "lint": "nx lint claim-info-demo",
+    "lint:all": "nx run-many --target=lint --all",
+    "graph": "nx graph",
+    "clean": "nx reset && Remove-Item -Recurse -Force dist,node_modules/.cache -ErrorAction SilentlyContinue"
   },
   "private": true,
   "dependencies": {
@@ -18,7 +24,8 @@
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.0",
-    "@mui/material": "^7.3.5",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.5",
     "@mui/x-date-pickers": "^8.19.0",
     "date-fns": "^4.1.0",
@@ -29,6 +36,9 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@nx/eslint": "22.1.2",
+    "@nx/eslint-plugin": "22.1.2",
     "@nx/jest": "22.1.2",
     "@nx/js": "22.1.2",
     "@nx/next": "22.1.2",
@@ -45,13 +55,19 @@
     "@types/react-dom": "^19.0.0",
     "@types/uuid": "^11.0.0",
     "babel-jest": "^30.0.2",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^10.0.0",
     "jest": "^30.0.2",
     "jest-environment-jsdom": "^30.0.2",
+    "jest-environment-node": "^30.0.2",
     "jest-util": "^30.0.2",
+    "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.1.2",
+    "prettier": "^2.6.2",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.40.0"
   }
 }

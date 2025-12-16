@@ -4,7 +4,7 @@ import { Roboto } from 'next/font/google';
 import './global.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import { MUThemeProvider } from '@/theme/MUThemeProvider';
+import { MUThemeProvider } from '@claim-info-demo/core';
 
 config.autoAddCss = false;
 

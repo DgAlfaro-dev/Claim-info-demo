@@ -1,0 +1,143 @@
+/**
+ * Tax ID Modal Component
+ * Modal para editar RUC del asegurado en Panamá
+ */
+
+'use client';
+
+import { FC, useState } from 'react';
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { BaseModal, PROJECT_NAME } from '@claim-info-demo/core';
+
+interface TaxIdModalProps {
+  open: boolean;
+  currentValue?: string;
+  onClose: () => void;
+  onConfirm: (taxId: string) => void;
+}
+
+/**
+ * Modal para editar el RUC del asegurado
+ * Formato esperado: 1234567-1-123456
+ */
+export const TaxIdModal: FC<TaxIdModalProps> = ({
+  open,
+  currentValue,
+  onClose,
+  onConfirm,
+}) => {
+  const [taxId, setTaxId] = useState(currentValue || '');
+  const [error, setError] = useState('');
+
+  const validateTaxId = (value: string): boolean => {
+    // Natural: 8-123-456
+    const naturalRegex = /^[1-9N]-\d{1,3}-\d{1,6}$/;
+    // Jurídica: PE-12-3456 o E-8-12345
+    const juridicaRegex = /^(PE|E|N|PI|NT|AV)-\d{1,4}-\d{1,6}$/;
+    // RUC completo: 1234567-1-123456
+    const rucRegex = /^\d{7}-\d{1}-\d{6}$/;
+    
+    return naturalRegex.test(value) || juridicaRegex.test(value) || rucRegex.test(value);
+  };
+
+  const handleConfirm = () => {
+    if (!taxId.trim()) {
+      setError('El Tax ID es requerido');
+      return;
+    }
+
+    if (!validateTaxId(taxId)) {
+      setError('Formato inválido. Use: 8-123-456 o PE-12-3456 o 1234567-1-123456');
+      return;
+    }
+
+    onConfirm(taxId);
+    setError('');
+    onClose();
+  };
+
+  const handleClose = () => {
+    setTaxId(currentValue || '');
+    setError('');
+    onClose();
+  };
+
+  return (
+    <BaseModal
+      open={open}
+      onClose={handleClose}
+      title="Editar RUC del Asegurado"
+    >
+      <Stack spacing={3}>
+        <Typography
+          id={`${PROJECT_NAME}-modal-panama-tax-id-description`}
+          data-testid={`${PROJECT_NAME}-modal-panama-tax-id-description`}
+          sx={{ color: '#7E8084', fontSize: '14px' }}
+        >
+          Ingrese el Tax ID (cédula), RUC o número de identificación del asegurado.
+        </Typography>
+
+        <Box>
+          <TextField
+            id={`${PROJECT_NAME}-input-panama-tax-id`}
+            data-testid={`${PROJECT_NAME}-input-panama-tax-id`}
+            fullWidth
+            label="Tax ID / RUC"
+            placeholder="8-123-456"
+            value={taxId}
+            onChange={(e) => {
+              setTaxId(e.target.value);
+              setError('');
+            }}
+            error={!!error}
+            helperText={error || 'Ej: 8-123-456, PE-12-3456 o 1234567-1-123456'}
+            autoFocus
+            sx={{
+              '& .MuiInputBase-root': {
+                fontSize: '15px',
+                fontWeight: 500,
+              },
+            }}
+          />
+        </Box>
+
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Button
+            id={`${PROJECT_NAME}-button-cancel-panama-tax-id`}
+            data-testid={`${PROJECT_NAME}-button-cancel-panama-tax-id`}
+            variant="outlined"
+            onClick={handleClose}
+            sx={{
+              textTransform: 'none',
+              borderColor: '#0193E5',
+              color: '#0193E5',
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button
+            id={`${PROJECT_NAME}-button-confirm-panama-tax-id`}
+            data-testid={`${PROJECT_NAME}-button-confirm-panama-tax-id`}
+            variant="contained"
+            onClick={handleConfirm}
+            sx={{
+              textTransform: 'none',
+              backgroundColor: '#0193E5',
+              '&:hover': {
+                backgroundColor: '#017AC0',
+              },
+            }}
+          >
+            Confirmar
+          </Button>
+        </Stack>
+      </Stack>
+    </BaseModal>
+  );
+};

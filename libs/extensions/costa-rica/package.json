@@ -1,0 +1,13 @@
+{
+  "name": "@claim-info-demo/costa-rica",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@claim-info-demo/core": "workspace:*"
+  }
+}
