@@ -1,5 +1,5 @@
 {
-  "name": "@claim-info-demo/extension-costa-rica",
+  "name": "@claim-info-demo/costa-rica",
   "version": "0.0.1",
   "private": true,
   "main": "./src/index.js",

@@ -27,10 +27,10 @@
       "@claim-info-demo/core": [
         "libs/core/src/index.ts"
       ],
-      "@claim-info-demo/extension-costa-rica": [
+      "@claim-info-demo/costa-rica": [
         "libs/extensions/costa-rica/src/index.ts"
       ],
-      "@claim-info-demo/extension-panama": [
+      "@claim-info-demo/panama": [
         "libs/extensions/panama/src/index.ts"
       ]
     }

@@ -1,6 +1,3 @@
-// Core exports
-export * from './core/claimInfo';
-
 // Theme exports
 export * from './theme/MUThemeProvider';
 export * from './theme/colors';
@@ -9,10 +6,14 @@ export * from './theme/colors';
 export * from './utils/utils';
 export * from './utils/constants/constants';
 
-// Features exports
-export * from './features/shared/components/AlertBanner';
-export * from './features/shared/components/BaseModal';
-export * from './features/shared/model/constants';
+// Shared exports
+export * from './shared/components/AlertBanner';
+export * from './shared/components/BaseModal';
+export * from './shared/model/constants';
+export * from './shared/interfaces/alertBanner';
 
-// Note: Extensions are now in separate libraries
-// Import from @claim-info-demo/extension-costa-rica and @claim-info-demo/extension-panama
+// Infrastructure Layer - Country Configuration
+export * from './infrastructure/country-config';
+
+// Domain Layer - Claim Info (Business logic + Extensions)
+export * from './domain/claim-info';

@@ -4,10 +4,21 @@
  */
 
 import { CountryConfig, SupportedCountry } from '@claim-info-demo/core';
-import { costaRicaFieldOverrides } from './config/fieldOverrides';
-import { costaRicaStoreExtension } from './store/storeExtension';
-import { costaRicaValidations } from './validations/globalValidations';
-import { costaRicaSubmitExtensions } from './submitExtensions';
+import {
+  costaRicaFieldOverrides,
+  costaRicaStoreExtension,
+  costaRicaValidations,
+  validateCostaRicanRuc,
+  validateRequiredFields,
+  validateAmounts,
+  addCostaRicaMetadata,
+  normalizeCostaRicanRuc,
+  normalizeCostaRicanAmounts,
+  enrichVehicleInformation,
+  logSubmitToLocalStorage,
+  sendConfirmationNotification,
+  generateClaimDocument,
+} from './features/claim-info';
 
 /**
  * Configuración completa de Costa Rica
@@ -22,5 +33,26 @@ export const costaRicaConfig: CountryConfig = {
   ],
   storeExtension: costaRicaStoreExtension,
   globalValidations: costaRicaValidations,
-  submitExtensions: costaRicaSubmitExtensions,
+  submitExtensions: {
+    preValidators: [
+      validateCostaRicanRuc,
+      validateRequiredFields,
+      validateAmounts,
+    ],
+    payloadMutators: [
+      addCostaRicaMetadata,
+      normalizeCostaRicanRuc,
+      normalizeCostaRicanAmounts,
+      enrichVehicleInformation,
+    ],
+    postHandlers: [
+      logSubmitToLocalStorage,
+      sendConfirmationNotification,
+      generateClaimDocument,
+    ],
+  },
 };
+
+// Re-exportar todas las features consolidadas
+export * from './features/claim-info';
+export * from './features/claim-info';

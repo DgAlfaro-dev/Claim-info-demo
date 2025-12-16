@@ -7,7 +7,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "@claim-info-demo/core": "workspace:*",
-    "@claim-info-demo/extension-costa-rica": "workspace:*",
-    "@claim-info-demo/extension-panama": "workspace:*"
+    "@claim-info-demo/costa-rica": "workspace:*",
+    "@claim-info-demo/panama": "workspace:*"
   }
 }

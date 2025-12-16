@@ -1,15 +1,21 @@
-# ClaimInfoDemo — Country‑extensible system
+# ClaimInfoDemo — Country‑extensible system with Feature Sliced Design
 
-This repository implements a claims information system (ClaimInfo) based on an Nx monorepo and a modular architecture. The core is decoupled from country‑specific extensions, allowing new countries to be added without modifying the base code or affecting existing behavior.
+This repository implements a claims information system (ClaimInfo) based on an Nx monorepo and a **Feature Sliced Design** architecture. The core is decoupled from country‑specific extensions, allowing new countries to be added without modifying the base code or affecting existing behavior.
 
 Key characteristics:
-- Nx monorepo with incremental builds and caching.
-- Independent libraries: core and extensions compile separately.
-- Registry pattern for extensions to avoid circular dependencies.
-- Country extensibility via declarative configuration and lazy loading.
-- Strict TypeScript typing across the system.
-- Multi‑currency support and country‑specific validations.
-- Unit and integration tests covering core and extensions.
+- ✅ **Feature Sliced Design** - Modular organization by features
+- ✅ Nx monorepo with incremental builds and caching
+- ✅ Independent libraries: core and extensions compile separately
+- ✅ Registry pattern for extensions to avoid circular dependencies
+- ✅ Country extensibility via declarative configuration and lazy loading
+- ✅ Strict TypeScript typing across the system
+- ✅ Multi‑currency support and country‑specific validations
+- ✅ Unit and integration tests covering core and extensions
+- ✅ No circular dependencies between packages
+
+## 📐 New Architecture (Feature Sliced Design)
+
+The project has been restructured to follow **Feature Sliced Design** principles. See [FEATURE_SLICED_DESIGN.md](./FEATURE_SLICED_DESIGN.md) for complete details.
 
 ---
 

@@ -4,11 +4,28 @@
  */
 
 import { CountryConfig, SupportedCountry } from '@claim-info-demo/core';
-import { panamaFieldOverrides } from './config/fieldOverrides';
-import { panamaDynamicFields } from './config/dynamicFields';
-import { panamaStoreExtension } from './store/storeExtension';
-import { panamaValidations } from './validations/globalValidations';
-import { panamaSubmitExtensions } from './submitExtensions';
+import {
+  panamaFieldOverrides,
+  panamaStoreExtension,
+  panamaValidations,
+  validatePanamaTaxId,
+  validateInsuranceZone,
+  validatePanamaRequiredFields,
+  validatePanamaAmounts,
+  addPanamaMetadata,
+  normalizePanamaTaxId,
+  addInsuranceZoneInformation,
+  normalizePanamaAmounts,
+  enrichPanamaVehicleInformation,
+  addRegulatoryInformation,
+  logPanamaSubmit,
+  notifySuperintendencia,
+  generatePanamaCertificate,
+  sendSmsConfirmation,
+  updateZoneStatistics,
+  panamaTaxIdField,
+  panamaInsuranceZoneField,
+} from './features/claim-info';
 
 /**
  * Configuración completa de Panamá
@@ -17,8 +34,33 @@ export const panamaConfig: CountryConfig = {
   countryCode: SupportedCountry.PANAMA,
   countryName: 'Panamá',
   fieldOverrides: panamaFieldOverrides,
-  dynamicFields: panamaDynamicFields,
+  dynamicFields: [panamaTaxIdField, panamaInsuranceZoneField],
   storeExtension: panamaStoreExtension,
   globalValidations: panamaValidations,
-  submitExtensions: panamaSubmitExtensions,
+  submitExtensions: {
+    preValidators: [
+      validatePanamaTaxId,
+      validateInsuranceZone,
+      validatePanamaRequiredFields,
+      validatePanamaAmounts,
+    ],
+    payloadMutators: [
+      addPanamaMetadata,
+      normalizePanamaTaxId,
+      addInsuranceZoneInformation,
+      normalizePanamaAmounts,
+      enrichPanamaVehicleInformation,
+      addRegulatoryInformation,
+    ],
+    postHandlers: [
+      logPanamaSubmit,
+      notifySuperintendencia,
+      generatePanamaCertificate,
+      sendSmsConfirmation,
+      updateZoneStatistics,
+    ],
+  },
 };
+
+// Re-exportar todas las features consolidadas
+export * from './features/claim-info';

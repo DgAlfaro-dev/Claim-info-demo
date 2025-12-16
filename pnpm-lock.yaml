@@ -165,10 +165,10 @@ importers:
       '@claim-info-demo/core':
         specifier: workspace:*
         version: link:../../libs/core
-      '@claim-info-demo/extension-costa-rica':
+      '@claim-info-demo/costa-rica':
         specifier: workspace:*
         version: link:../../libs/extensions/costa-rica
-      '@claim-info-demo/extension-panama':
+      '@claim-info-demo/panama':
         specifier: workspace:*
         version: link:../../libs/extensions/panama
       next:
