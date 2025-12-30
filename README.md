@@ -3,17 +3,17 @@
 This repository implements a claims information system (ClaimInfo) based on an Nx monorepo and a **Feature Sliced Design** architecture. The core is decoupled from country‑specific extensions, allowing new countries to be added without modifying the base code or affecting existing behavior.
 
 Key characteristics:
-- ✅ **Feature Sliced Design** - Modular organization by features
-- ✅ Nx monorepo with incremental builds and caching
-- ✅ Independent libraries: core and extensions compile separately
-- ✅ Registry pattern for extensions to avoid circular dependencies
-- ✅ Country extensibility via declarative configuration and lazy loading
-- ✅ Strict TypeScript typing across the system
-- ✅ Multi‑currency support and country‑specific validations
-- ✅ Unit and integration tests covering core and extensions
-- ✅ No circular dependencies between packages
+-  **Feature Sliced Design** - Modular organization by features
+-  Nx monorepo with incremental builds and caching
+-  Independent libraries: core and extensions compile separately
+-  Registry pattern for extensions to avoid circular dependencies
+-  Country extensibility via declarative configuration and lazy loading
+-  Strict TypeScript typing across the system
+-  Multi‑currency support and country‑specific validations
+-  Unit and integration tests covering core and extensions
+-  No circular dependencies between packages
 
-## 📐 Architecture (Feature Sliced Design)
+##  Architecture (Feature Sliced Design)
 
 The project follows **Feature Sliced Design** principles with a clear separation between:
 - **Application Layer** (`apps/`): UI orchestration and feature composition
@@ -724,7 +724,7 @@ import { costaRicaConfig } from '@claim-info-demo/extension-costa-rica';
 import { panamaConfig } from '@claim-info-demo/extension-panama';
 
 // No deep imports needed
-// ❌ import { CountryConfigFactory } from '../../libs/core/src/core/claimInfo/factory/CountryConfigFactory';
+//  import { CountryConfigFactory } from '../../libs/core/src/core/claimInfo/factory/CountryConfigFactory';
 ```
 
 ### Nx Configuration
@@ -892,18 +892,18 @@ Nx Console plugin available in JetBrains Marketplace:
 
 | Feature | Costa Rica | Panama | Extensibility |
 |---------|-----------|--------|---------------|
-| Feature Structure | ✅ `features/claim-info/` | ✅ `features/claim-info/` | ✅ Organized by domain |
-| Field Overrides | 3 | 4 | ✅ Unlimited |
-| Dynamic Fields | 0 | 2 | ✅ Unlimited |
-| Custom Components | 0 | 4 | ✅ Full React support |
-| Store State | 2 props | 3 props | ✅ Unlimited |
-| Store Actions | 2 | 3 | ✅ Unlimited |
-| PreValidators | 3 | 4 | ✅ Pipeline extensible |
-| PayloadMutators | 4 | 6 | ✅ Pipeline extensible |
-| PostHandlers | 3 | 5 | ✅ Pipeline extensible |
-| Validators | 2 | 4 | ✅ Unlimited |
-| Modal Dialogs | 0 | 2 | ✅ Full customization |
-| Test Files | 7 | 13 | ✅ Jest ecosystem |
+| Feature Structure |  `features/claim-info/` |  `features/claim-info/` |  Organized by domain |
+| Field Overrides | 3 | 4 |  Unlimited |
+| Dynamic Fields | 0 | 2 |  Unlimited |
+| Custom Components | 0 | 4 |  Full React support |
+| Store State | 2 props | 3 props |  Unlimited |
+| Store Actions | 2 | 3 |  Unlimited |
+| PreValidators | 3 | 4 |  Pipeline extensible |
+| PayloadMutators | 4 | 6 |  Pipeline extensible |
+| PostHandlers | 3 | 5 |  Pipeline extensible |
+| Validators | 2 | 4 |  Unlimited |
+| Modal Dialogs | 0 | 2 |  Full customization |
+| Test Files | 7 | 13 |  Jest ecosystem |
 
 ---
 
